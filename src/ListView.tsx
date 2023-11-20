@@ -9,9 +9,7 @@ const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [items, setItems] = useState<Map<string, ItemData>>(new Map<string, ItemData>());
   const onPress = (item: ItemData) => {
-    // TODO
-    item.isDone = true
-    setItems(new Map(items.set(item.id, item)))
+    setItems(updateItems(items, {...item, isDone: true}))
   }
   const renderItem = ({item}: {item: ItemData}) => <Item item={item} onPress={onPress} />;
 
