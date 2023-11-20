@@ -1,15 +1,8 @@
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TextInput, View,} from 'react-native';
 import React, {useState} from 'react';
 import Button from './shared/components/Button';
-import {ItemData} from './shared/models/ItemData';
+import {ItemData, newItemData, updateItems} from './shared/models/ItemData';
 import Separator from './shared/components/Separator';
-import {v4 as uuidv4} from 'uuid';
 import Item from "./shared/components/Item";
 
 const ListView = () => {
@@ -34,10 +27,8 @@ const ListView = () => {
         <Button
           title="Add"
           onPress={() => {
-            //TODO extract
-            const item = {id: uuidv4(), title: inputValue, isDone: false} as ItemData;
             setInputValue('')
-            setItems(new Map(items.set(item.id, item)));
+            setItems(updateItems(items, newItemData(inputValue)));
           }}
         />
       </View>
@@ -46,7 +37,6 @@ const ListView = () => {
         data={[...items.values()]}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        extraData={items} // TODO
       />
     </SafeAreaView>
   );
