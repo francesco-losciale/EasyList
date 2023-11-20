@@ -8,7 +8,10 @@ type ButtonProps = {
 
 const Button = ({onPress, title = 'Save'}: ButtonProps) => {
   return (
-    <Pressable style={styles.button} onPress={onPress}>
+    <Pressable
+      style={styles.button}
+      onPress={onPress}
+      testID={'button-add-item'}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
