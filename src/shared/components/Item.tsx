@@ -4,7 +4,7 @@ import {ItemData} from '../models/ItemData';
 
 const Item = ({item, onPress}: {item: ItemData, onPress: (item: ItemData) => void}) => {
   return (
-    <TouchableOpacity style={styles.item} onPress={() => onPress(item)}>
+    <TouchableOpacity style={styles.item} onPress={() => onPress(item)} accessibilityRole={'text'}>
       {(item.isDone) ?
         <Text style={styles.titleDone}>{item.title}</Text>:
         <Text style={styles.title}>{item.title}</Text>}

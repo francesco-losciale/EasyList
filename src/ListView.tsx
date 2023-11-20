@@ -9,6 +9,7 @@ const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [items, setItems] = useState<Map<string, ItemData>>(new Map<string, ItemData>());
   const onPress = (item: ItemData) => {
+    // TODO
     item.isDone = true
     setItems(new Map(items.set(item.id, item)))
   }
@@ -34,7 +35,10 @@ const ListView = () => {
       </View>
       <Separator />
       <FlatList
-        data={[...items.values()]}
+        data={[...items.values()]
+          .filter(item => !item.isDone)
+          .concat([...items.values()]
+            .filter(item => item.isDone))}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
