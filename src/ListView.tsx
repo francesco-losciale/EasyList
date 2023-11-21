@@ -11,6 +11,7 @@ const ListView = observer(() => {
   const [inputValue, setInputValue] = useState<string>('');
   const [items, setItems] = useState<Map<string, ItemData>>(new Map<string, ItemData>());
   const listsStore = useListsStore()
+
   const onPress = (item: ItemData) => {
     setItems(updateItems(items, {...item, isDone: true}))
   }

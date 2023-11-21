@@ -5,6 +5,8 @@ import {ListsStore, ListsStoreProvider} from "../src/shared/stores/listsStore";
 
 describe('List of items', () => {
 
+  const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+
   it('renders correctly', () => {
     render(<ListView />);
 
@@ -15,11 +17,8 @@ describe('List of items', () => {
   it('can add item to list', async () => {
     render(<ListView />);
     const textInput = screen.getByPlaceholderText('Insert text here');
-    const addButton = screen.getByTestId('button-add-item');
-    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-    await user.type(textInput, 'new item');
-    await user.press(addButton);
+    await addItem('new item')
 
     expect(await screen.findByText('new item'));
     expect(textInput).toHaveTextContent('')
@@ -27,11 +26,7 @@ describe('List of items', () => {
 
   it('can mark item in the list by tapping on it', async () => {
     render(<ListView />);
-    const textInput = screen.getByPlaceholderText('Insert text here');
-    const addButton = screen.getByTestId('button-add-item');
-    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-    await user.type(textInput, 'new item');
-    await user.press(addButton);
+    await addItem('new item')
     const itemOnList = await screen.findByText('new item')
 
     await user.press(itemOnList)
@@ -41,16 +36,9 @@ describe('List of items', () => {
 
   it('items marked as done are at the bottom', async () => {
     render(<ListView />);
-    const textInput = screen.getByPlaceholderText('Insert text here');
-    const addButton = screen.getByTestId('button-add-item');
-    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-
-    await user.type(textInput, 'new item 1');
-    await user.press(addButton);
-    await user.type(textInput, 'new item 2');
-    await user.press(addButton);
-    await user.type(textInput, 'new item 3');
-    await user.press(addButton);
+    await addItem('new item 1');
+    await addItem('new item 2');
+    await addItem('new item 3');
 
     const itemOnList = await screen.findByText('new item 1')
     await user.press(itemOnList)
@@ -69,15 +57,9 @@ describe('List of items', () => {
           <ListView/>
         </ListsStoreProvider>
     );
-    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-    const textInput = screen.getByPlaceholderText('Insert text here');
-    const addButton = screen.getByTestId('button-add-item');
-    await user.type(textInput, 'new item 4');
-    await user.press(addButton);
-    await user.type(textInput, 'new item 5');
-    await user.press(addButton);
-    await user.type(textInput, 'new item 6');
-    await user.press(addButton);
+    await addItem('new item 4');
+    await addItem('new item 5');
+    await addItem('new item 6');
     const saveListButton = screen.getByTestId('button-save-list-item');
 
     await user.press(saveListButton)
@@ -85,5 +67,14 @@ describe('List of items', () => {
     expect(listsStore.getLists).toHaveLength(1)
     expect(listsStore.getLists[0].size).toBe(3)
   })
+
+  const addItem = async (text: string) => {
+    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    const textInput = screen.getByPlaceholderText('Insert text here');
+    const addButton = screen.getByTestId('button-add-item');
+
+    await user.type(textInput, text);
+    await user.press(addButton);
+  }
 
 })
