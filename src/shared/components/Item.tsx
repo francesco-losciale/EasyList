@@ -1,8 +1,9 @@
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {ItemData} from '../models/ItemData';
+import {Todo} from "../stores/todoListsStore";
+import {observer} from "mobx-react";
 
-const Item = ({item, onPress}: {item: ItemData, onPress: (item: ItemData) => void}) => {
+const Item = ({item, onPress}: {item: Todo, onPress: (item: Todo) => void}) => {
   return (
     <TouchableOpacity style={styles.item} onPress={() => onPress(item)} accessibilityRole={'text'}>
       {(item.isDone) ?
@@ -27,4 +28,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Item;
+export default observer(Item);

@@ -8,14 +8,24 @@ describe('List of items', () => {
   const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
   it('renders correctly', () => {
-    render(<ListView />);
+    const todoStore = TodoListsStore.create()
+    render(
+      <TodoListsStoreProvider value={todoStore}>
+        <ListView/>
+      </TodoListsStoreProvider>
+    );
 
     expect(screen.getByPlaceholderText('Insert text here')).toBeTruthy();
     expect(screen.getByTestId('button-add-item')).toBeTruthy();
   });
 
   it('can add item to list', async () => {
-    render(<ListView />);
+    const todoStore = TodoListsStore.create()
+    render(
+      <TodoListsStoreProvider value={todoStore}>
+        <ListView/>
+      </TodoListsStoreProvider>
+    );
     const textInput = screen.getByPlaceholderText('Insert text here');
 
     await addItem('new item')
@@ -25,7 +35,12 @@ describe('List of items', () => {
   });
 
   it('can mark item in the list by tapping on it', async () => {
-    render(<ListView />);
+    const todoStore = TodoListsStore.create()
+    render(
+      <TodoListsStoreProvider value={todoStore}>
+        <ListView/>
+      </TodoListsStoreProvider>
+    );
     await addItem('new item')
     const itemOnList = await screen.findByText('new item')
 
@@ -35,7 +50,12 @@ describe('List of items', () => {
   });
 
   it('items marked as done are at the bottom', async () => {
-    render(<ListView />);
+    const todoStore = TodoListsStore.create()
+    render(
+      <TodoListsStoreProvider value={todoStore}>
+        <ListView/>
+      </TodoListsStoreProvider>
+    );
     await addItem('new item 1');
     await addItem('new item 2');
     await addItem('new item 3');

@@ -1,21 +1,19 @@
 import {FlatList, SafeAreaView, StyleSheet, TextInput, View,} from 'react-native';
 import React, {useState} from 'react';
 import Button from './shared/components/Button';
-import {ItemData, newItemData, updateItems} from './shared/models/ItemData';
 import Separator from './shared/components/Separator';
 import Item from "./shared/components/Item";
 import {observer} from "mobx-react";
-import {useTodoListsStore} from "./shared/stores/todoListsStore";
+import {Todo, useTodoListsStore} from "./shared/stores/todoListsStore";
 
 const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [items, setItems] = useState<Map<string, ItemData>>(new Map<string, ItemData>());
   const todoListsStore = useTodoListsStore()
 
-  const onPress = (item: ItemData) => {
-    setItems(updateItems(items, {...item, isDone: true}))
+  const onPress = (item: Todo) => {
+    item.toggle()
   }
-  const renderItem = ({item}: {item: ItemData}) => <Item item={item} onPress={onPress} />;
+  const renderItem = ({item}: { item: Todo }) => <Item item={item} onPress={onPress}/>;
 
   return (
     <SafeAreaView>
@@ -32,25 +30,22 @@ const ListView = () => {
           testID={'button-add-item'}
           onPress={() => {
             setInputValue('')
-            setItems(updateItems(items, newItemData(inputValue)));
+            todoListsStore.addItemToCurrentList(inputValue);
           }}
         />
         <Button
           title="Save"
           testID={'button-save-list-item'}
           onPress={() => {
-            todoListsStore.addList([...items.values()].map(item => item.title))
+            todoListsStore.saveCurrentList()
           }}
         />
       </View>
-      <Separator />
+      <Separator/>
       <FlatList
-        data={[...items.values()]
-          .filter(item => !item.isDone)
-          .concat([...items.values()]
-            .filter(item => item.isDone))}
+        data={todoListsStore.currentList?.getTodos}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(todo: Todo) => todo.id}
       />
     </SafeAreaView>
   );
