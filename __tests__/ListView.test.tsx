@@ -7,25 +7,25 @@ describe('List of items', () => {
 
   const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-  it('renders correctly', () => {
+  const renderWithStore = () => {
     const todoStore = TodoListsStore.create()
     render(
       <TodoListsStoreProvider value={todoStore}>
         <ListView/>
       </TodoListsStoreProvider>
     );
+    return {todoStore}
+  }
+
+  it('renders correctly', () => {
+    renderWithStore()
 
     expect(screen.getByPlaceholderText('Insert text here')).toBeTruthy();
     expect(screen.getByTestId('button-add-item')).toBeTruthy();
   });
 
   it('can add item to list', async () => {
-    const todoStore = TodoListsStore.create()
-    render(
-      <TodoListsStoreProvider value={todoStore}>
-        <ListView/>
-      </TodoListsStoreProvider>
-    );
+    renderWithStore()
     const textInput = screen.getByPlaceholderText('Insert text here');
 
     await addItem('new item')
@@ -35,12 +35,7 @@ describe('List of items', () => {
   });
 
   it('can mark item in the list by tapping on it', async () => {
-    const todoStore = TodoListsStore.create()
-    render(
-      <TodoListsStoreProvider value={todoStore}>
-        <ListView/>
-      </TodoListsStoreProvider>
-    );
+    renderWithStore()
     await addItem('new item')
     const itemOnList = await screen.findByText('new item')
 
@@ -50,12 +45,7 @@ describe('List of items', () => {
   });
 
   it('items marked as done are at the bottom', async () => {
-    const todoStore = TodoListsStore.create()
-    render(
-      <TodoListsStoreProvider value={todoStore}>
-        <ListView/>
-      </TodoListsStoreProvider>
-    );
+    renderWithStore()
     await addItem('new item 1');
     await addItem('new item 2');
     await addItem('new item 3');
@@ -71,12 +61,8 @@ describe('List of items', () => {
   });
 
   it('can save the list', async () => {
-    const todoStore = TodoListsStore.create()
-    render(
-        <TodoListsStoreProvider value={todoStore}>
-          <ListView/>
-        </TodoListsStoreProvider>
-    );
+    const {todoStore} = renderWithStore()
+
     await addItem('new item 4');
     await addItem('new item 5');
     await addItem('new item 6');

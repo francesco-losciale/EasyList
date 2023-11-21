@@ -54,17 +54,17 @@ export const TodoListsStore = types
         })
         self.lists.replace([...self.lists, todoList])
       },
-      saveCurrentList() {
-        if (self.currentList) {
-          self.lists.replace(self.lists.concat(self.currentList))
-        }
-      },
       addItemToCurrentList(item: string) {
         if (self.currentList === null) {
           self.currentList = TodoList.create({id: uuidv4()})
         }
         self.currentList.addTodo(item)
-      }
+      },
+      saveCurrentList() {
+        if (self.currentList) {
+          self.lists.replace(self.lists.concat(self.currentList))
+        }
+      },
     })
   )
 
@@ -73,6 +73,4 @@ export const TodoListsStoreProvider = TodoListsStoreContext.Provider
 export const useTodoListsStore = () => React.useContext(TodoListsStoreContext)
 
 type TodoType = Instance<typeof Todo>
-
-export interface Todo extends TodoType {
-}
+export interface Todo extends TodoType {}
