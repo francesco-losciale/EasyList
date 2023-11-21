@@ -42,18 +42,11 @@ export const TodoListsStore = types
     currentList: types.maybeNull(TodoList),
   })
   .views((self) => ({
-    get todoLists() {
+    get todoLists(): TodoList[] {
       return self.lists
     },
   }))
   .actions((self) => ({
-      addList(list: string[]) {
-        const todoList = TodoList.create({id: uuidv4()})
-        list.forEach(text => {
-          todoList.addTodo(text)
-        })
-        self.lists.replace([...self.lists, todoList])
-      },
       addItemToCurrentList(item: string) {
         if (self.currentList === null) {
           self.currentList = TodoList.create({id: uuidv4()})
@@ -73,4 +66,6 @@ export const TodoListsStoreProvider = TodoListsStoreContext.Provider
 export const useTodoListsStore = () => React.useContext(TodoListsStoreContext)
 
 type TodoType = Instance<typeof Todo>
+type TodoListType = Instance<typeof TodoList>
 export interface Todo extends TodoType {}
+export interface TodoList extends TodoListType {}

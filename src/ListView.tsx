@@ -10,9 +10,7 @@ const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const todoListsStore = useTodoListsStore()
 
-  const onPress = (item: Todo) => {
-    item.toggle()
-  }
+  const onPress = (item: Todo) => item.toggle()
   const renderItem = ({item}: { item: Todo }) => <Item item={item} onPress={onPress}/>;
 
   return (

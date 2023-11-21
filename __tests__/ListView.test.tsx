@@ -3,7 +3,7 @@ import {render, screen, userEvent} from '@testing-library/react-native';
 import ListView from '../src/ListView';
 import {TodoListsStore, TodoListsStoreProvider} from "../src/shared/stores/todoListsStore";
 
-describe('List of items', () => {
+describe('List view', () => {
 
   const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
@@ -76,6 +76,21 @@ describe('List of items', () => {
     expect(todoStore.todoLists[0].getTodos[0].title).toBe('new item 4')
     expect(todoStore.todoLists[0].getTodos[1].title).toBe('new item 5')
     expect(todoStore.todoLists[0].getTodos[2].title).toBe('new item 6')
+  })
+
+  it('can save the list multiple times', async ()=> {
+    const {todoStore} = renderWithStore()
+    const saveListButton = screen.getByTestId('button-save-list-item');
+
+    await addItem('new item 1');
+    await addItem('new item 2');
+    await user.press(saveListButton)
+    await addItem('new item 1');
+    await addItem('new item 2');
+    await addItem('new item 3');
+    await user.press(saveListButton)
+
+    expect(todoStore.todoLists).toHaveLength(2)
   })
 
   const addItem = async (text: string) => {
