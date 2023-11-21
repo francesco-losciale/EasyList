@@ -1,6 +1,4 @@
 import React from 'react';
-import {makeObservable, action, observable} from 'mobx';
-import {ItemData, newItemData} from "../models/ItemData";
 import {types} from 'mobx-state-tree';
 import {v4 as uuidv4} from "uuid";
 
@@ -54,25 +52,6 @@ export const TodoListsStore = types
       self.lists.replace([...self.lists, todoList])
     },
   }))
-
-export class ListsStore {
-  lists: Array<Map<string, ItemData>> = new Array<Map<string, ItemData>>();
-
-  constructor() {
-    makeObservable(this, {
-      lists: observable,
-      addList: action.bound,
-    })
-  }
-
-  addList(list: Map<string, ItemData>) {
-    this.lists.push(list)
-  }
-
-  get getLists() {
-    return this.lists
-  }
-}
 
 export const TodoListsStoreContext = React.createContext(TodoListsStore.create())
 export const TodoListsStoreProvider = TodoListsStoreContext.Provider

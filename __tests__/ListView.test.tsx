@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, screen, userEvent} from '@testing-library/react-native';
 import ListView from '../src/ListView';
-import {ListsStore, TodoListsStore, TodoListsStoreProvider} from "../src/shared/stores/listsStore";
+import {TodoListsStore, TodoListsStoreProvider} from "../src/shared/stores/todoListsStore";
 
 describe('List of items', () => {
 
@@ -51,7 +51,6 @@ describe('List of items', () => {
   });
 
   it('can save the list', async () => {
-    const listsStore = new ListsStore()
     const todoStore = TodoListsStore.create()
     render(
         <TodoListsStoreProvider value={todoStore}>

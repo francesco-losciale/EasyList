@@ -5,7 +5,7 @@ import {ItemData, newItemData, updateItems} from './shared/models/ItemData';
 import Separator from './shared/components/Separator';
 import Item from "./shared/components/Item";
 import {observer} from "mobx-react";
-import {useTodoListsStore} from "./shared/stores/listsStore";
+import {useTodoListsStore} from "./shared/stores/todoListsStore";
 
 const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
