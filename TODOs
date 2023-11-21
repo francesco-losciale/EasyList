@@ -1,0 +1,4 @@
+- introduce mobx-state-tree
+- create the store in index.js and pass it down to components
+- components will render the list reading from the store
+- create screen for list of lists
