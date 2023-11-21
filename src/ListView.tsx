@@ -1,18 +1,19 @@
-import {FlatList, SafeAreaView, StyleSheet, TextInput, View,} from 'react-native';
+import {FlatList, ListRenderItem, SafeAreaView, StyleSheet, TextInput, View,} from 'react-native';
 import React, {useState} from 'react';
 import Button from './shared/components/Button';
 import Separator from './shared/components/Separator';
-import Item from "./shared/components/Item";
+import Item, {ItemTodoList} from "./shared/components/Item";
 import {observer} from "mobx-react";
-import {Todo, useTodoListsStore} from "./shared/stores/todoListsStore";
+import {Todo, TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
 
 const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const todoListsStore = useTodoListsStore()
 
   const onPress = (item: Todo) => item.toggle()
-  const renderItem = ({item}: { item: Todo }) => <Item item={item} onPress={onPress}/>;
-
+  const renderItem: ListRenderItem<Todo> = ({ item }) => (
+    <Item item={item} onPress={onPress}/>
+  );
   return (
     <SafeAreaView>
       <View>
