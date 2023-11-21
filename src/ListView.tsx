@@ -4,13 +4,13 @@ import Button from './shared/components/Button';
 import {ItemData, newItemData, updateItems} from './shared/models/ItemData';
 import Separator from './shared/components/Separator';
 import Item from "./shared/components/Item";
-import {useListsStore} from "./shared/stores/listsStore";
 import {observer} from "mobx-react";
+import {useTodoListsStore} from "./shared/stores/listsStore";
 
-const ListView = observer(() => {
+const ListView = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [items, setItems] = useState<Map<string, ItemData>>(new Map<string, ItemData>());
-  const listsStore = useListsStore()
+  const todoListsStore = useTodoListsStore()
 
   const onPress = (item: ItemData) => {
     setItems(updateItems(items, {...item, isDone: true}))
@@ -39,7 +39,7 @@ const ListView = observer(() => {
           title="Save"
           testID={'button-save-list-item'}
           onPress={() => {
-            listsStore.addList(items)
+            todoListsStore.addList([...items.values()].map(item => item.title))
           }}
         />
       </View>
@@ -54,7 +54,7 @@ const ListView = observer(() => {
       />
     </SafeAreaView>
   );
-});
+};
 
 const styles = StyleSheet.create({
   textInput: {
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListView;
+export default observer(ListView);
