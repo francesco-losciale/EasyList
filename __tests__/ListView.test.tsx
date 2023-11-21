@@ -1,6 +1,7 @@
 import React from 'react';
 import {render, screen, userEvent} from '@testing-library/react-native';
 import ListView from '../src/ListView';
+import {ListsStore, ListsStoreProvider} from "../src/shared/stores/listsStore";
 
 describe('List of items', () => {
 
@@ -60,5 +61,29 @@ describe('List of items', () => {
     expect(items[1]).toHaveTextContent('new item 3')
     expect(items[2]).toHaveTextContent('new item 1')
   });
+
+  it('can save the list', async () => {
+    const listsStore = new ListsStore()
+    render(
+        <ListsStoreProvider value={listsStore}>
+          <ListView/>
+        </ListsStoreProvider>
+    );
+    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    const textInput = screen.getByPlaceholderText('Insert text here');
+    const addButton = screen.getByTestId('button-add-item');
+    await user.type(textInput, 'new item 4');
+    await user.press(addButton);
+    await user.type(textInput, 'new item 5');
+    await user.press(addButton);
+    await user.type(textInput, 'new item 6');
+    await user.press(addButton);
+    const saveListButton = screen.getByTestId('button-save-list-item');
+
+    await user.press(saveListButton)
+
+    expect(listsStore.getLists).toHaveLength(1)
+    expect(listsStore.getLists[0].size).toBe(3)
+  })
 
 })

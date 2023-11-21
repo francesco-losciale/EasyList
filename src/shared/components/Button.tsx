@@ -3,15 +3,16 @@ import React from 'react';
 
 type ButtonProps = {
   onPress: () => void;
+  testID: string;
   title: string;
 };
 
-const Button = ({onPress, title = 'Save'}: ButtonProps) => {
+const Button = ({onPress, testID, title = 'Save'}: ButtonProps) => {
   return (
     <Pressable
       style={styles.button}
       onPress={onPress}
-      testID={'button-add-item'}>
+      testID={testID}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
