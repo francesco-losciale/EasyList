@@ -1,12 +1,17 @@
-import {FlatList, ListRenderItem, SafeAreaView} from "react-native";
+import {FlatList, ListRenderItem, Pressable, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
 import {Todo, TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
 import React from "react";
 import Item, {ItemTodoList} from "./shared/components/Item";
+import Button from "./shared/components/Button";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "./App";
 
-const HomeView = () => {
+type HomeViewNavigationProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const HomeView = ({navigation}: HomeViewNavigationProps) => {
   const todoListsStore = useTodoListsStore()
-  const onPress = (todoList: TodoList) => console.log('pressed')
-  const renderItem: ListRenderItem<TodoList> = ({ item }) => (
+  const onPress = (todoList: TodoList) => navigation.navigate('List')
+  const renderItem: ListRenderItem<TodoList> = ({item}) => (
     <ItemTodoList item={item} onPress={onPress}></ItemTodoList>
   );
   return (
@@ -15,6 +20,13 @@ const HomeView = () => {
         data={todoListsStore.todoLists}
         renderItem={renderItem}
         keyExtractor={(list: TodoList) => list.id}
+      />
+      <Button
+        title="Create"
+        testID={'button-create-list'}
+        onPress={() => {
+          navigation.navigate('List')
+        }}
       />
     </SafeAreaView>
   )

@@ -2,11 +2,15 @@ import {FlatList, ListRenderItem, SafeAreaView, StyleSheet, TextInput, View,} fr
 import React, {useState} from 'react';
 import Button from './shared/components/Button';
 import Separator from './shared/components/Separator';
-import Item, {ItemTodoList} from "./shared/components/Item";
+import Item from "./shared/components/Item";
 import {observer} from "mobx-react";
-import {Todo, TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
+import {Todo, useTodoListsStore} from "./shared/stores/todoListsStore";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "./App";
 
-const ListView = () => {
+type ListViewNavigationProps = NativeStackScreenProps<RootStackParamList, 'List'>;
+
+const ListView = ({navigation}: ListViewNavigationProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const todoListsStore = useTodoListsStore()
 
@@ -37,6 +41,7 @@ const ListView = () => {
           testID={'button-save-list-item'}
           onPress={() => {
             todoListsStore.saveCurrentList()
+            navigation.navigate('Home')
           }}
         />
       </View>

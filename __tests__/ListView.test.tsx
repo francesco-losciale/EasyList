@@ -7,25 +7,15 @@ describe('List view', () => {
 
   const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-  const renderWithStore = () => {
-    const todoStore = TodoListsStore.create()
-    render(
-      <TodoListsStoreProvider value={todoStore}>
-        <ListView/>
-      </TodoListsStoreProvider>
-    );
-    return {todoStore}
-  }
-
   it('renders correctly', () => {
-    renderWithStore()
+    renderListView()
 
     expect(screen.getByPlaceholderText('Insert text here')).toBeTruthy();
     expect(screen.getByTestId('button-add-item')).toBeTruthy();
   });
 
   it('can add item to list', async () => {
-    renderWithStore()
+    renderListView()
     const textInput = screen.getByPlaceholderText('Insert text here');
 
     await addItem('new item')
@@ -35,7 +25,7 @@ describe('List view', () => {
   });
 
   it('can mark item in the list by tapping on it', async () => {
-    renderWithStore()
+    renderListView()
     await addItem('new item')
     const itemOnList = await screen.findByText('new item')
 
@@ -45,7 +35,7 @@ describe('List view', () => {
   });
 
   it('items marked as done are at the bottom', async () => {
-    renderWithStore()
+    renderListView()
     await addItem('new item 1');
     await addItem('new item 2');
     await addItem('new item 3');
@@ -61,7 +51,7 @@ describe('List view', () => {
   });
 
   it('can save the list', async () => {
-    const {todoStore} = renderWithStore()
+    const {todoStore} = renderListView()
 
     await addItem('new item 4');
     await addItem('new item 5');
@@ -78,21 +68,6 @@ describe('List view', () => {
     expect(todoStore.todoLists[0].getTodos[2].title).toBe('new item 6')
   })
 
-  it('can save the list multiple times', async ()=> {
-    const {todoStore} = renderWithStore()
-    const saveListButton = screen.getByTestId('button-save-list-item');
-
-    await addItem('new item 1');
-    await addItem('new item 2');
-    await user.press(saveListButton)
-    await addItem('new item 1');
-    await addItem('new item 2');
-    await addItem('new item 3');
-    await user.press(saveListButton)
-
-    expect(todoStore.todoLists).toHaveLength(2)
-  })
-
   const addItem = async (text: string) => {
     const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
     const textInput = screen.getByPlaceholderText('Insert text here');
@@ -102,4 +77,18 @@ describe('List view', () => {
     await user.press(addButton);
   }
 
+  const renderListView = () => {
+    const todoStore = TodoListsStore.create()
+    const props: any = {
+      navigation: {
+        navigate: jest.fn()
+      },
+    }
+    render(
+      <TodoListsStoreProvider value={todoStore}>
+        <ListView {...props} />
+      </TodoListsStoreProvider>
+    );
+    return {todoStore}
+  }
 })
