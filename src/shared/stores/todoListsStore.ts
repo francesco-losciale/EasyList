@@ -43,7 +43,7 @@ export const TodoListsStore = types
   })
   .views((self) => ({
     get todoLists(): TodoList[] {
-      return self.lists
+      return self.lists.slice() // fixes re-rendering issue
     },
   }))
   .actions((self) => ({
@@ -55,9 +55,20 @@ export const TodoListsStore = types
       },
       saveCurrentList() {
         if (self.currentList) {
-          self.lists.replace(self.lists.concat(self.currentList))
+          self.lists.replace([...self.lists, self.currentList])
+          self.lists
+          self.currentList
+          self.todoLists
         }
+        // TODO should reset self.currentList
       },
+      selectCurrentList(listId: string) {
+        const selectedList = self.lists.find((list) => list.id === listId)
+        if (!selectedList) {
+          throw new Error('Something went wrong')
+        }
+        self.currentList = selectedList
+      }
     })
   )
 
@@ -67,5 +78,13 @@ export const useTodoListsStore = () => React.useContext(TodoListsStoreContext)
 
 type TodoType = Instance<typeof Todo>
 type TodoListType = Instance<typeof TodoList>
-export interface Todo extends TodoType {}
-export interface TodoList extends TodoListType {}
+type TodoListsType = Instance<typeof TodoListsStore>
+
+export interface Todo extends TodoType {
+}
+
+export interface TodoList extends TodoListType {
+}
+
+export interface TodoLists extends TodoListsType {
+}

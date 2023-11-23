@@ -1,22 +1,26 @@
-import {render, screen, userEvent} from "@testing-library/react-native";
-import {TodoListsStore, TodoListsStoreProvider} from "../src/shared/stores/todoListsStore";
+import {render, screen, userEvent, waitFor} from "@testing-library/react-native";
+import {TodoLists, TodoListsStore, TodoListsStoreProvider} from "../src/shared/stores/todoListsStore";
 import React from "react";
 import HomeView from "../src/HomeView";
 
 describe('Home view', () => {
 
-  it('renders correctly', async () => {
-    renderHomeView()
+  it('renders list of lists', async () => {
+    const todoStore = createTodoStore()
+    renderHomeView({todoStore})
+    const listId = todoStore.todoLists[0].id
 
-    const lists = await screen.findAllByRole('text')
-    expect(lists).toHaveLength(1)
+    expect(await screen.findByText(listId)).toBeOnTheScreen()
   });
 
-  const renderHomeView = () => {
+  const createTodoStore = () => {
     const todoStore = TodoListsStore.create()
-    todoStore.addItemToCurrentList('test 1')
-    todoStore.addItemToCurrentList('test 2')
+    todoStore.addItemToCurrentList('text')
     todoStore.saveCurrentList()
+    return todoStore
+  }
+
+  const renderHomeView = ({todoStore} : {todoStore: TodoLists}) => {
     const props: any = {
       navigation: {
         navigate: jest.fn()

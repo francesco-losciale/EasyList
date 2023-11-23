@@ -1,8 +1,9 @@
 import React from 'react';
-import ListView from './ListView';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import HomeView from "./HomeView";
+import ListView from './ListView';
+import {TodoListsStore, TodoListsStoreProvider} from "./shared/stores/todoListsStore";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -11,13 +12,16 @@ export type RootStackParamList = {
 
 const App = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
+  const todoListsStore = TodoListsStore.create()
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={"Home"}>
-        <Stack.Screen name="Home" component={HomeView} />
-        <Stack.Screen name="List" component={ListView} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TodoListsStoreProvider value={todoListsStore}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={"Home"}>
+          <Stack.Screen name="Home" component={HomeView} />
+          <Stack.Screen name="List" component={ListView} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TodoListsStoreProvider>
   );
 };
 

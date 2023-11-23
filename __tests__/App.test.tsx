@@ -1,33 +1,56 @@
 import React from 'react';
 import App from '../src/App';
-import {render, screen, userEvent} from "@testing-library/react-native";
+import {render, screen, userEvent, waitFor} from "@testing-library/react-native";
 
-it('renders correctly', () => {
-  render(<App/>);
+describe('App', () => {
 
-  expect(screen.getByText('Create')).toBeOnTheScreen();
-});
+  it('renders correctly', () => {
+    render(<App/>);
 
-it('can navigate from home view to list view', async () => {
-  render(<App/>);
-  const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    expect(screen.getByText('Create')).toBeOnTheScreen();
+  });
 
-  const button = await screen.findByTestId('button-create-list')
-  await user.press(button)
+  it('can navigate from home view to list view', async () => {
+    render(<App/>);
+    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-  expect(screen.getByText('Add')).toBeOnTheScreen();
-});
+    const button = await screen.findByTestId('button-create-list')
+    await user.press(button)
 
-it('can navigate back to home page after clicking save', async () => {
-  render(<App/>);
-  const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-  const button = await screen.findByTestId('button-create-list')
-  await user.press(button)
+    expect(screen.getByText('Add')).toBeOnTheScreen();
+  });
 
-  const saveButton = await screen.findByTestId('button-save-list-item')
-  await user.press(saveButton)
+  it('can navigate back to home page after clicking save', async () => {
+    render(<App/>);
+    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    const button = await screen.findByTestId('button-create-list')
+    await user.press(button)
 
-  expect(screen.getByText('Create')).toBeOnTheScreen();
-});
+    const saveButton = await screen.findByTestId('button-save-list-item')
+    await user.press(saveButton)
+
+    expect(screen.getByText('Create')).toBeOnTheScreen();
+  });
+
+  it('can create a list and view it', async () => {
+    render(<App/>);
+    const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    const button = await screen.findByTestId('button-create-list')
+    await user.press(button)
+    const textInput = screen.getByPlaceholderText('Insert text here');
+    await user.type(textInput, 'item of the list')
+    const addItemButton = await screen.findByTestId('button-add-item')
+    await user.press(addItemButton)
+    const saveButton = await screen.findByTestId('button-save-list-item')
+    await user.press(saveButton)
+    expect(screen.getByText('Create')).toBeOnTheScreen();
+
+    const firstList = (await screen.findAllByRole('text'))[0]
+    await user.press(firstList)
+
+    expect(await screen.findByText('item of the list')).toBeOnTheScreen()
+  });
+
+})
 
 

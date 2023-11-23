@@ -1,16 +1,20 @@
-import {FlatList, ListRenderItem, Pressable, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
-import {Todo, TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
+import {FlatList, ListRenderItem, SafeAreaView} from "react-native";
+import {TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
 import React from "react";
-import Item, {ItemTodoList} from "./shared/components/Item";
+import {ItemTodoList} from "./shared/components/Item";
 import Button from "./shared/components/Button";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "./App";
+import {observer} from "mobx-react";
 
 type HomeViewNavigationProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeView = ({navigation}: HomeViewNavigationProps) => {
   const todoListsStore = useTodoListsStore()
-  const onPress = (todoList: TodoList) => navigation.navigate('List')
+  const onPress = (todoList: TodoList) => {
+    todoListsStore.selectCurrentList(todoList.id)
+    navigation.navigate('List')
+  }
   const renderItem: ListRenderItem<TodoList> = ({item}) => (
     <ItemTodoList item={item} onPress={onPress}></ItemTodoList>
   );
@@ -32,4 +36,4 @@ const HomeView = ({navigation}: HomeViewNavigationProps) => {
   )
 }
 
-export default HomeView;
+export default observer(HomeView);
