@@ -14,8 +14,8 @@ describe('App', () => {
     render(<App/>);
     const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-    const button = await screen.findByTestId('button-create-list')
-    await user.press(button)
+    const createListButton = await screen.findByTestId('button-create-list')
+    await user.press(createListButton)
 
     expect(screen.getByText('Add')).toBeOnTheScreen();
   });
@@ -23,8 +23,8 @@ describe('App', () => {
   it('can navigate back to home page after clicking save', async () => {
     render(<App/>);
     const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-    const button = await screen.findByTestId('button-create-list')
-    await user.press(button)
+    const createListButton = await screen.findByTestId('button-create-list')
+    await user.press(createListButton)
 
     const saveButton = await screen.findByTestId('button-save-list-item')
     await user.press(saveButton)
@@ -35,8 +35,8 @@ describe('App', () => {
   it('can create a list and view it', async () => {
     render(<App/>);
     const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
-    const button = await screen.findByTestId('button-create-list')
-    await user.press(button)
+    const createListButton = await screen.findByTestId('button-create-list')
+    await user.press(createListButton)
     const textInput = screen.getByPlaceholderText('Insert text here');
     await user.type(textInput, 'item of the list')
     const addItemButton = await screen.findByTestId('button-add-item')

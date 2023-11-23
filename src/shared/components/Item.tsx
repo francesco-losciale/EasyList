@@ -29,10 +29,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
   },
   titleDone: {
-    fontSize: 32,
+    fontSize: 24,
     textDecorationLine: 'line-through'
   }
 });
