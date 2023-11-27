@@ -1,15 +1,15 @@
 ### This todo list project showcases:
 
-- Usage of react-native to build ios and Android apps 
-- Use mobx-state-tree for state management
+- React-native to build ios and Android apps 
+- mobx-state-tree for state management
 - How to test views individually with reactnative testing library
 - How to test user journeys using detox for e2e tests
 
 #### What's next:
 
 - Improve UX
-- Send data to the backend
-- Copy link to a list and share it
+- Send data to a backend service
+- Share a link to a list to another user
 
 #### Prerequisites:
 
