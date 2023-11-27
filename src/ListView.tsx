@@ -4,7 +4,7 @@ import Button from './shared/components/Button';
 import Separator from './shared/components/Separator';
 import Item from "./shared/components/Item";
 import {observer} from "mobx-react";
-import {Todo, useTodoListsStore} from "./shared/stores/todoListsStore";
+import {Todo, TodoList, useTodoListsStore} from "./shared/stores/todoListsStore";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "./App";
 

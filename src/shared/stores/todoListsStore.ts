@@ -38,36 +38,35 @@ const TodoList = types
 
 export const TodoListsStore = types
   .model({
-    lists: types.array(types.reference(TodoList)),
-    currentList: types.maybeNull(TodoList),
+    lists: types.array(TodoList),
+    selectedList: types.maybeNull(types.reference(TodoList)),
   })
   .views((self) => ({
     get todoLists(): TodoList[] {
       return self.lists.slice() // fixes re-rendering issue
     },
+    get currentList() {
+      return self.lists[0]
+    }
   }))
   .actions((self) => ({
       addItemToCurrentList(item: string) {
-        if (self.currentList === null) {
-          self.currentList = TodoList.create({id: uuidv4()})
+        if (self.selectedList === null) {
+          self.lists.replace([TodoList.create({id: uuidv4()}), ...self.lists])
+          self.selectedList = self.lists[0]
         }
-        self.currentList.addTodo(item)
+        self.selectedList.addTodo(item)
       },
       saveCurrentList() {
-        if (self.currentList) {
-          self.lists.replace([...self.lists, self.currentList])
-          self.lists
-          self.currentList
-          self.todoLists
-        }
-        // TODO should reset self.currentList
+        // TODO flag selected list as "saved"
+        self.selectedList = null
       },
       selectCurrentList(listId: string) {
         const selectedList = self.lists.find((list) => list.id === listId)
         if (!selectedList) {
           throw new Error('Something went wrong')
         }
-        self.currentList = selectedList
+        self.selectedList = selectedList
       }
     })
   )
