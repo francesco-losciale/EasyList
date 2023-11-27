@@ -14,9 +14,9 @@ const Item = ({item, onPress}: {item: Todo, onPress: (item: Todo) => void}) => {
 };
 
 // TODO fix this
-export const ItemTodoList = ({item, onPress}: {item: TodoList, onPress: (todoList: TodoList) => void}) => {
+export const ItemTodoList = ({item, onPress, testID}: {item: TodoList, onPress: (todoList: TodoList) => void, testID: string}) => {
   return (
-    <TouchableOpacity style={styles.item} onPress={() => onPress(item)} accessibilityRole={'text'}>
+    <TouchableOpacity style={styles.item} onPress={() => onPress(item)} accessibilityRole={'text'} testID={testID}>
       <Text>{item.id}</Text>
     </TouchableOpacity>
   );

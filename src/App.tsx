@@ -17,8 +17,8 @@ const App = () => {
     <TodoListsStoreProvider value={todoListsStore}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={"Home"}>
-          <Stack.Screen name="Home" component={HomeView} />
-          <Stack.Screen name="List" component={ListView} />
+          <Stack.Screen name="Home" component={HomeView}/>
+          <Stack.Screen name="List" component={ListView}/>
         </Stack.Navigator>
       </NavigationContainer>
     </TodoListsStoreProvider>

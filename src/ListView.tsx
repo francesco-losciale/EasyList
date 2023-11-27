@@ -27,22 +27,23 @@ const ListView = ({navigation}: ListViewNavigationProps) => {
           placeholder={'Insert text here'}
           onChangeText={setInputValue}
           value={inputValue}
+          testID={'insert-text-here'}
         />
         <Button
           title="Add"
-          testID={'button-add-item'}
           onPress={() => {
             setInputValue('')
             todoListsStore.addItemToCurrentList(inputValue);
           }}
+          testID={'button-add-item'}
         />
         <Button
           title="Save"
-          testID={'button-save-list-item'}
           onPress={() => {
             todoListsStore.saveCurrentList()
             navigation.navigate('Home')
           }}
+          testID={'button-save-list-item'}
         />
       </View>
       <Separator/>
@@ -50,6 +51,7 @@ const ListView = ({navigation}: ListViewNavigationProps) => {
         data={todoListsStore.currentList?.getTodos}
         renderItem={renderItem}
         keyExtractor={(todo: Todo) => todo.id}
+        testID={'todo-list'}
       />
     </SafeAreaView>
   );

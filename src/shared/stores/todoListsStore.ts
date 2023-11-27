@@ -1,5 +1,5 @@
 import React from 'react';
-import {Instance, types} from 'mobx-state-tree';
+import {detach, Instance, types} from 'mobx-state-tree';
 import {v4 as uuidv4} from "uuid";
 
 const Todo = types
@@ -46,7 +46,7 @@ export const TodoListsStore = types
       return self.lists.slice() // fixes re-rendering issue
     },
     get currentList() {
-      return self.lists[0]
+      return self.selectedList
     }
   }))
   .actions((self) => ({
@@ -67,6 +67,9 @@ export const TodoListsStore = types
           throw new Error('Something went wrong')
         }
         self.selectedList = selectedList
+      },
+      reset() {
+        self.selectedList = null
       }
     })
   )

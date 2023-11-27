@@ -15,8 +15,8 @@ const HomeView = ({navigation}: HomeViewNavigationProps) => {
     todoListsStore.selectCurrentList(todoList.id)
     navigation.navigate('List')
   }
-  const renderItem: ListRenderItem<TodoList> = ({item}) => (
-    <ItemTodoList item={item} onPress={onPress}></ItemTodoList>
+  const renderItem: ListRenderItem<TodoList> = ({item, index}) => (
+    <ItemTodoList item={item} onPress={onPress} testID={'todo-lists-' + index}></ItemTodoList>
   );
   return (
     <SafeAreaView>
@@ -24,13 +24,15 @@ const HomeView = ({navigation}: HomeViewNavigationProps) => {
         data={todoListsStore.todoLists}
         renderItem={renderItem}
         keyExtractor={(list: TodoList) => list.id}
+        testID={'todo-lists'}
       />
       <Button
         title="Create"
-        testID={'button-create-list'}
         onPress={() => {
+          todoListsStore.reset()
           navigation.navigate('List')
         }}
+        testID={'button-create-list'}
       />
     </SafeAreaView>
   )
